@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "ysVector.h"
+#include "ysVector.hpp"
 
 namespace YS::Math
 {
