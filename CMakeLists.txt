@@ -1,14 +1,25 @@
-﻿cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.25)
+
+project(YSMath)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(target_name YSMath)
 
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/*.cpp)
+
+# target 설정
+add_library(${target_name} ${sources})
+
+message(STATUS ${CMAKE_INSTALL_PREFIX})
 add_subdirectory(submodules/YSDefine)
 
-target_include_directories(${target_name}
-PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc
-# PRIVATE
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-target_compile_features(${target_name} PUBLIC cxx_std_20)
+if (TEST_FLAG)
+
+endif()
+
+# 설치
+install(DIRECTORY   ./inc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS    ${target_name} 
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

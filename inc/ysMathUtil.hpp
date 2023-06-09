@@ -1,4 +1,4 @@
-﻿namespace FJ::Math
+namespace FJ::Math
 {
     template <typename T>
     T GCD(T const &a, T const &b)

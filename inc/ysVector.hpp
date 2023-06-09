@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <cmath>
 #include <exception>
@@ -185,9 +185,6 @@ namespace YS::Math
     inline Vector4 operator*(Float s, Vector4 const &v) { return Vector4(s * v.x, s * v.y, s * v.z, s * v.w); }
     inline Vector4 operator/(Vector4 const &v, Float s) { if (IsZero(s)) throw division_by_zero(); return Vector4(v.x / s, v.y / s, v.z / s, v.w / s); }
     #pragma endregion
-
-    inline Vector2::operator Vector3() { return Vector3(x, y, 0.0f); }
-    inline Vector3::operator Vector2() { return Vector2(x, y); }
 
     #pragma region Utility Functions
     inline Float Distance(Vector2 const & v1, Vector2 const & v2) { return (v2 - v1).Length(); }
