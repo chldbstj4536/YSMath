@@ -12,14 +12,16 @@ file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/*.cpp)
 add_library(${target_name} ${sources})
 
 message(STATUS ${CMAKE_INSTALL_PREFIX})
-add_subdirectory(submodules/YSDefine)
 
-if (TEST_FLAG)
+execute_process(COMMAND ${CMAKE_COMMAND} -S ${CMAKE_SOURCE_DIR}/submodules/YSDefine -B ${CMAKE_BINARY_DIR}/YSDefine -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
+execute_process(COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/YSDefine --target install)
 
-endif()
+target_include_directories(YSMath
+    PRIVATE ./inc
+    PUBLIC ./out/inc)
 
 # 설치
-install(DIRECTORY   ./inc
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY ./inc/
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/YSMath/inc)
 install(TARGETS    ${target_name} 
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/YSMath/lib)
