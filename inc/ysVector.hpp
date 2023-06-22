@@ -1,12 +1,22 @@
+/**
+ * @file ysVector.hpp
+ * @author 최윤서 (choicoco1995@naver.com)
+ * @brief Implementation vector class
+ * @version 0.1
+ * @date 2023-06-22
+ * 
+ * @copyright Copyright (c) 2023 최윤서. All rights reserved.
+ */
 #pragma once
 
 #include <cmath>
 #include <exception>
+#include <format>
 #include <ysDefine.hpp>
 
 namespace YS::Math
 {
-    bool IsZero(Float f) { return std::fabsf(f) <= FLT_EPSILON; }
+    inline bool IsZero(Float f) { return std::fabsf(f) <= FLT_EPSILON; }
 
     struct Vector2;
     struct Vector3;
@@ -36,13 +46,13 @@ namespace YS::Math
         Vector2& operator-=(Vector2 const &v) noexcept                              { return *this = *this - v; }
         Vector2& operator*=(Float s) noexcept                                       { return *this = s * *this; }
         Vector2& operator/=(Float s) throw(division_by_zero)                        { return *this = *this / s; }
-        operator YS::Math::Vector3() noexcept;
-        operator Vector4() noexcept;
+        operator Vector3() const noexcept;
+        operator Vector4() const noexcept;
 
         Float           LengthSquared() const noexcept                              { return x*x + y*y; }
         Float           Length() const noexcept                                     { return std::sqrtf(LengthSquared()); }
         Float           DistanceSquared(Vector2 const &v) const noexcept            { return (*this - v).LengthSquared(); }
-        Float           Distance(Vector2 const &v) const noexcept            { return (*this - v).Length(); }
+        Float           Distance(Vector2 const &v) const noexcept                   { return (*this - v).Length(); }
         Float           Dot(const Vector2 &other) const noexcept                    { return x*other.x + y*other.y; }
         Vector2&        Normalize() throw(division_by_zero);
 
@@ -66,10 +76,10 @@ namespace YS::Math
     //-------------------------------------------
     // Vector 3
     //-------------------------------------------
-    inline Vector3 operator-(Vector3 const &v);
-    inline Vector3 operator+(Vector3 const &v1, Vector3 const &v2);
-    inline Vector3 operator-(Vector3 const &v1, Vector3 const &v2);
-    inline Vector3 operator*(Float s, Vector3 const &v);
+    inline Vector3 operator-(Vector3 const &v) noexcept;
+    inline Vector3 operator+(Vector3 const &v1, Vector3 const &v2) noexcept;
+    inline Vector3 operator-(Vector3 const &v1, Vector3 const &v2) noexcept;
+    inline Vector3 operator*(Float s, Vector3 const &v) noexcept;
     inline Vector3 operator/(Vector3 const &v, Float s) throw(division_by_zero);
 
     struct Vector3
@@ -81,45 +91,49 @@ namespace YS::Math
         Vector3& operator=(Vector3 const &v) = default;
         Vector3& operator=(Vector3 &&v) = default;
 
-        Vector3(Float x, Float y, Float z) : x(x), y(y), z(z) {}
+        Vector3(Float x, Float y, Float z) noexcept : x(x), y(y), z(z) {}
 
-        Vector3& operator+=(Vector3 const &v) { return *this = *this + v; }
-        Vector3& operator-=(Vector3 const &v) { return *this = *this - v; }
-        Vector3& operator*=(Float s) { return *this = s * *this; }
-        Vector3& operator/=(Float s) throw(division_by_zero) { return *this = *this / s; }
-        operator Vector2();
-        operator Vector4();
+        Vector3& operator+=(Vector3 const &v) noexcept          { return *this = *this + v; }
+        Vector3& operator-=(Vector3 const &v) noexcept          { return *this = *this - v; }
+        Vector3& operator*=(Float s) noexcept                   { return *this = s * *this; }
+        Vector3& operator/=(Float s) throw(division_by_zero)    { return *this = *this / s; }
+        operator Vector2() const noexcept;
+        operator Vector4() const noexcept;
 
-        Float LengthSquared() const { return x*x + y*y + z*z; }
-        Float Length() const { return std::sqrtf(LengthSquared()); }
+        Float LengthSquared() const noexcept                    { return x*x + y*y + z*z; }
+        Float Length() const noexcept                           { return std::sqrtf(LengthSquared()); }
+        Float DistanceSquared(Vector3 const &v) const noexcept  { return (*this - v).LengthSquared(); }
+        Float Distance(Vector3 const &v) const noexcept         { return (*this - v).Length(); }
+        Float Dot(Vector3 const &v) const noexcept              { return x*v.x + y*v.y + z*v.z; }
+        Vector3 Cross(Vector3 const &v) const noexcept          { return Vector3(y*v.z - v.y*z, z*v.x - v.z*x, x*v.y - v.x*y); }
         Vector3& Normalize() throw(division_by_zero);
-        Float Dot(Vector3 const &v) const { return x*v.x + y*v.y + z*v.z; }
-        Vector3 Cross(Vector3 const &v) const { return Vector3(y*v.z - v.y*z, z*v.x - v.z*x, x*v.y - v.x*y); }
 
-        static Float LengthSquared(Vector3 const &v) { return v.LengthSquared(); }
-        static Float Length(Vector3 const &v) { return v.Length(); }
-        static Vector3 Normalize(Vector3 const &v) { return Vector3(v).Normalize(); }
-        static Float Dot(Vector3 const &v1, Vector3 const &v2) { return v1.Dot(v2); }
-        static Vector3 Cross(Vector3 const &v1, Vector3 const &v2) { return v1.Cross(v2); }
+        static Float LengthSquared(Vector3 const &v) noexcept                           { return v.LengthSquared(); }
+        static Float Length(Vector3 const &v) noexcept                                  { return v.Length(); }
+        static Float DistanceSquared(Vector3 const &v1, Vector3 const &v2) noexcept     { return v1.DistanceSquared(v2); }
+        static Float Distance(Vector3 const &v1, Vector3 const &v2) noexcept            { return v1.Distance(v2); }
+        static Vector3 Normalize(Vector3 const &v) noexcept                             { return Vector3(v).Normalize(); }
+        static Float Dot(Vector3 const &v1, Vector3 const &v2) noexcept                 { return v1.Dot(v2); }
+        static Vector3 Cross(Vector3 const &v1, Vector3 const &v2) noexcept             { return v1.Cross(v2); }
 
         Float x, y, z;
     };
     
     #pragma region Vector3_Implementation
-    inline Vector3 operator-(Vector3 const &v) { return Vector3(-v.x, -v.y, -v.z); }
-    inline Vector3 operator+(Vector3 const &v1, Vector3 const &v2) { return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
-    inline Vector3 operator-(Vector3 const &v1, Vector3 const &v2) { return v1 + -v2; }
-    inline Vector3 operator*(Float s, Vector3 const &v) { return Vector3(s * v.x, s * v.y, s * v.z); }
-    inline Vector3 operator/(Vector3 const &v, Float s) { if (IsZero(s)) throw division_by_zero(); return Vector3(v.x / s, v.y / s, v.z / s); }
+    inline Vector3 operator-(Vector3 const &v) noexcept                         { return Vector3(-v.x, -v.y, -v.z); }
+    inline Vector3 operator+(Vector3 const &v1, Vector3 const &v2) noexcept     { return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
+    inline Vector3 operator-(Vector3 const &v1, Vector3 const &v2) noexcept     { return v1 + -v2; }
+    inline Vector3 operator*(Float s, Vector3 const &v) noexcept                { return Vector3(s * v.x, s * v.y, s * v.z); }
+    inline Vector3 operator/(Vector3 const &v, Float s) throw(division_by_zero) { if (IsZero(s)) throw division_by_zero(); return Vector3(v.x / s, v.y / s, v.z / s); }
     #pragma endregion
 
     //-------------------------------------------
     // Vector 4
     //-------------------------------------------
-    inline Vector4 operator-(Vector4 const &v);
-    inline Vector4 operator+(Vector4 const &v1, Vector4 const &v2);
-    inline Vector4 operator-(Vector4 const &v1, Vector4 const &v2);
-    inline Vector4 operator*(Float s, Vector4 const &v);
+    inline Vector4 operator-(Vector4 const &v) noexcept;
+    inline Vector4 operator+(Vector4 const &v1, Vector4 const &v2) noexcept;
+    inline Vector4 operator-(Vector4 const &v1, Vector4 const &v2) noexcept;
+    inline Vector4 operator*(Float s, Vector4 const &v) noexcept;
     inline Vector4 operator/(Vector4 const &v, Float s) throw(division_by_zero);
 
     struct Vector4
@@ -131,40 +145,83 @@ namespace YS::Math
         Vector4& operator=(Vector4 const &v) = default;
         Vector4& operator=(Vector4 &&v) = default;
 
-        Vector4(Float x, Float y, Float z, Float w) : x(x), y(y), z(z), w(w) {}
+        Vector4(Float x, Float y, Float z, Float w) noexcept : x(x), y(y), z(z), w(w) {}
 
-        Vector4& operator+=(Vector4 const &v) { return *this = *this + v; }
-        Vector4& operator-=(Vector4 const &v) { return *this = *this - v; }
-        Vector4& operator*=(Float s) { return *this = s * *this; }
-        Vector4& operator/=(Float s) throw(division_by_zero) { return *this = *this / s; }
-        operator Vector2();
-        operator Vector3();
+        Vector4& operator+=(Vector4 const &v) noexcept          { return *this = *this + v; }
+        Vector4& operator-=(Vector4 const &v) noexcept          { return *this = *this - v; }
+        Vector4& operator*=(Float s) noexcept                   { return *this = s * *this; }
+        Vector4& operator/=(Float s) throw(division_by_zero)    { return *this = *this / s; }
+        operator Vector2() const noexcept;
+        operator Vector3() const noexcept;
 
-        Float LengthSquared() const { return x*x + y*y + z*z + w*w; }
-        Float Length() const { return std::sqrtf(LengthSquared()); }
+        Float LengthSquared() const noexcept                    { return x*x + y*y + z*z + w*w; }
+        Float Length() const noexcept                           { return std::sqrtf(LengthSquared()); }
+        Float DistanceSquared(Vector4 const &v) const noexcept  { return (*this - v).LengthSquared(); }
+        Float Distance(Vector4 const &v) const noexcept         { return (*this - v).Length(); }
+        Float Dot(Vector4 const &v) const noexcept              { return x*v.x + y*v.y + z*v.z + w*v.w; }
         Vector4& Normalize() throw(division_by_zero);
-        Float Dot(Vector4 const &v) const { return x*v.x + y*v.y + z*v.z + w*v.w; }
 
-        static Float LengthSquared(Vector4 const &v) { return v.LengthSquared(); }
-        static Float Length(Vector4 const &v) { return v.Length(); }
-        static Vector4 Normalize(Vector4 const &v) { return Vector4(v).Normalize(); }
-        static Float Dot(Vector4 const &v1, Vector4 const &v2) { return v1.Dot(v2); }
+        static Float LengthSquared(Vector4 const &v) noexcept                           { return v.LengthSquared(); }
+        static Float Length(Vector4 const &v) noexcept                                  { return v.Length(); }
+        static Float DistanceSquared(Vector4 const & v1, Vector4 const & v2) noexcept   { return v1.DistanceSquared(v2); }
+        static Float Distance(Vector4 const & v1, Vector4 const & v2) noexcept          { return v1.Distance(v2); }
+        static Vector4 Normalize(Vector4 const &v) noexcept                             { return Vector4(v).Normalize(); }
+        static Float Dot(Vector4 const &v1, Vector4 const &v2) noexcept                 { return v1.Dot(v2); }
 
         Float x, y, z, w;
     };
     
     #pragma region Vector4_Implementation
-    inline Vector4 operator-(Vector4 const &v) { return Vector4(-v.x, -v.y, -v.z, -v.w); }
-    inline Vector4 operator+(Vector4 const &v1, Vector4 const &v2) { return Vector4(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w); }
-    inline Vector4 operator-(Vector4 const &v1, Vector4 const &v2) { return v1 + -v2; }
-    inline Vector4 operator*(Float s, Vector4 const &v) { return Vector4(s * v.x, s * v.y, s * v.z, s * v.w); }
-    inline Vector4 operator/(Vector4 const &v, Float s) { if (IsZero(s)) throw division_by_zero(); return Vector4(v.x / s, v.y / s, v.z / s, v.w / s); }
-    #pragma endregion
-
-    #pragma region Utility_Functions
-    inline Float Distance(Vector3 const & v1, Vector3 const & v2) { return (v2 - v1).Length(); }
-    inline Float Distance(Vector4 const & v1, Vector4 const & v2) { return (v2 - v1).Length(); }
-    inline Float DistanceSquared(Vector3 const & v1, Vector3 const & v2) { return (v2 - v1).LengthSquared(); }
-    inline Float DistanceSquared(Vector4 const & v1, Vector4 const & v2) { return (v2 - v1).LengthSquared(); }
+    inline Vector4 operator-(Vector4 const &v) noexcept                             { return Vector4(-v.x, -v.y, -v.z, -v.w); }
+    inline Vector4 operator+(Vector4 const &v1, Vector4 const &v2) noexcept         { return Vector4(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w); }
+    inline Vector4 operator-(Vector4 const &v1, Vector4 const &v2) noexcept         { return v1 + -v2; }
+    inline Vector4 operator*(Float s, Vector4 const &v) noexcept                    { return Vector4(s * v.x, s * v.y, s * v.z, s * v.w); }
+    inline Vector4 operator/(Vector4 const &v, Float s) throw(division_by_zero)     { if (IsZero(s)) throw division_by_zero(); return Vector4(v.x / s, v.y / s, v.z / s, v.w / s); }
     #pragma endregion
 }
+
+template <>
+struct std::formatter<YS::Math::Vector2> : std::formatter<YS::Float>
+{
+    auto format(const YS::Math::Vector2 &v, std::format_context &format_ctx)
+    {
+        auto out = format_ctx.out();
+        out = std::format_to(out, "{{");
+        out = std::formatter<float>::format(v.x, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.y, format_ctx);
+        return std::format_to(out, "}}");
+    }
+};
+template <>
+struct std::formatter<YS::Math::Vector3> : std::formatter<YS::Float>
+{
+    auto format(const YS::Math::Vector3& v, std::format_context& format_ctx)
+    {
+        auto out = format_ctx.out();
+        out = std::format_to(out, "{{");
+        out = std::formatter<float>::format(v.x, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.y, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.z, format_ctx);
+        return std::format_to(out, "}}");
+    }
+};
+template <>
+struct std::formatter<YS::Math::Vector4> : std::formatter<YS::Float>
+{
+    auto format(const YS::Math::Vector4& v, std::format_context& format_ctx)
+    {
+        auto out = format_ctx.out();
+        out = std::format_to(out, "{{");
+        out = std::formatter<float>::format(v.x, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.y, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.z, format_ctx);
+        out = std::format_to(out, " ");
+        out = std::formatter<float>::format(v.w, format_ctx);
+        return std::format_to(out, "}}");
+    }
+};
