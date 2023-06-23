@@ -1,3 +1,6 @@
 [submodule "submodules/YSDefine"]
 	path = submodules/YSDefine
 	url = ../YSDefine.git
+[submodule "submodules/YSUtility"]
+	path = submodules/YSUtility
+	url = Git-chldbstj4536:chldbstj4536/YSUtility.git

@@ -13,7 +13,7 @@
 #define _YS_MATH_END }
 
 _YS_MATH_BEGIN
-Vector2::operator Vector3() const noexcept { return Vector3(0, 0, 0); }
+Vector2::operator Vector3() const noexcept { return Vector3(x, y, 0); }
 Vector2::operator Vector4() const noexcept { return Vector4(x, y, 0, 0); }
 Vector2& Vector2::Normalize() throw(division_by_zero)
 {
