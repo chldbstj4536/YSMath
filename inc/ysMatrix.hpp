@@ -14,8 +14,11 @@
 
 namespace YS::Math
 {
+    class invertible_matrix : public std::exception { };
+
     class Matrix3x3;
     Matrix3x3 operator*(Matrix3x3 const &m1, Matrix3x3 const &m2) noexcept;
+    inline Matrix3x3 operator*(Float k, Matrix3x3 const &m) noexcept;
 
     class Matrix3x3
     {
@@ -85,13 +88,27 @@ namespace YS::Math
             // rowIndex, colIndex 세너티 체크 필요
             data[3 * rowIndex + colIndex] = setData;
         }
-        Matrix3x3& Transpose() noexcept;
+        Matrix3x3& Transpose() noexcept
+        {
+            for (UInt i = 0; i < 3; ++i)
+                for (UInt j = i + 1; j < 3; ++j)
+                    std::swap(data[3 * i + j], data[3 * j + i]);
+            return *this;
+        }
+        Float Det() const noexcept;
+        Matrix3x3 Adjoint() const noexcept;
+        bool IsInvertible() const noexcept                  { return !IsZero(Det()); }
+        Matrix3x3 Inverse() const throw(invertible_matrix)  { if (!IsInvertible()) throw invertible_matrix(); return (1 / Det()) * Adjoint(); }
 
-        static Matrix3x3 Transpose(Matrix3x3 const &m)
+        static Matrix3x3 Transpose(Matrix3x3 const &m) noexcept
         {
             Matrix3x3 result = m;
             return result.Transpose();
         }
+        static Float Det(Matrix3x3 const &m) noexcept                           { return m.Det(); }
+        static Matrix3x3 Adjoint(Matrix3x3 const &m) noexcept                   { return m.Adjoint(); }
+        static bool IsInvertible(Matrix3x3 const &m) noexcept                   { return m.IsInvertible(); }
+        static Matrix3x3 Inverse(Matrix3x3 const &m) throw(invertible_matrix)   { if (!m.IsInvertible()) throw invertible_matrix(); return m.Inverse(); }
 
         static const Matrix3x3 Identity;
     

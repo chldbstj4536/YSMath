@@ -30,7 +30,7 @@ Matrix3x3 BFMatrixMultiply(Matrix3x3 const& m1, Matrix3x3 const& m2)
 }
 
 //#define VECTOR_TEST
-//#define MATRIX_TEST
+#define MATRIX_TEST
 
 int main()
 {
@@ -262,14 +262,14 @@ int main()
     {
         cout << format("----------Constructor Test!----------\n");
 
-        Matrix3x3 m3x3_1{ static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)),
+        Matrix3x3 m1{ static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)),
                           static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)),
                           static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)) };
 
-        Matrix3x3 m3x3_2{ GetVector3Random(), GetVector3Random(), GetVector3Random() };
+        Matrix3x3 m2{ GetVector3Random(), GetVector3Random(), GetVector3Random() };
 
-        cout << format("m3x3_1, init with elemets: {}\n", m3x3_1);
-        cout << format("m3x3_2, init with colVectors: {}\n", m3x3_2);
+        cout << format("m1, init with elemets: {}\n", m1);
+        cout << format("m2, init with colVectors: {}\n", m2);
         cout << format("----------Constructor Test End!----------\n");
     }
 #pragma endregion
@@ -280,26 +280,26 @@ int main()
     {
         cout << format("----------Operator Test!----------\n");
 
-        Matrix3x3 m3x3_1 = GetMatrix3x3Random();
-        Matrix3x3 m3x3_2 = GetMatrix3x3Random();
+        Matrix3x3 m1 = GetMatrix3x3Random();
+        Matrix3x3 m2 = GetMatrix3x3Random();
         Vector3 v3 = GetVector3Random();
         YS::Float k = YS::Random(kMin, kMax);
 
-        cout << format("{} + {} = {}\n", m3x3_1, m3x3_2, m3x3_1 + m3x3_2);
-        cout << format("{} - {} = {}\n", m3x3_1, m3x3_2, m3x3_1 - m3x3_2);
-        cout << format("{} * {} = {}\n", m3x3_1, m3x3_2, m3x3_1 * m3x3_2);
-        cout << format("{} * {} = {}\n", m3x3_1, v3, m3x3_1 * v3);
-        cout << format("{} * {} = {}\n", k, m3x3_2, k * m3x3_2);
+        cout << format("{} + {} = {}\n", m1, m2, m1 + m2);
+        cout << format("{} - {} = {}\n", m1, m2, m1 - m2);
+        cout << format("{} * {} = {}\n", m1, m2, m1 * m2);
+        cout << format("{} * {} = {}\n", m1, v3, m1 * v3);
+        cout << format("{} * {} = {}\n", k, m2, k * m2);
 
-        cout << format("m3x3_1: {}\n", m3x3_1);
-        cout << format("m3x3_1 += {}\n", m3x3_1 += GetMatrix3x3Random());
-        cout << format("m3x3_1: {}\n", m3x3_1);
-        cout << format("m3x3_1 -= {}\n", m3x3_1 -= GetMatrix3x3Random());
-        cout << format("m3x3_1: {}\n", m3x3_1);
-        cout << format("m3x3_1 *= {}\n", m3x3_1 *= GetMatrix3x3Random());
-        cout << format("m3x3_1: {}\n", m3x3_1);
-        cout << format("m3x3_1 *= {}\n", m3x3_1 *= k);
-        cout << format("m3x3_1: {}\n", m3x3_1);
+        cout << format("m1: {}\n", m1);
+        cout << format("m1 += {}\n", m1 += GetMatrix3x3Random());
+        cout << format("m1: {}\n", m1);
+        cout << format("m1 -= {}\n", m1 -= GetMatrix3x3Random());
+        cout << format("m1: {}\n", m1);
+        cout << format("m1 *= {}\n", m1 *= GetMatrix3x3Random());
+        cout << format("m1: {}\n", m1);
+        cout << format("m1 *= {}\n", m1 *= k);
+        cout << format("m1: {}\n", m1);
 
         cout << format("{} == {} : {}\n", m1, m2, m1 == m2);
         cout << format("{} != {} : {}\n", m1, m2, m1 != m2);
@@ -309,14 +309,31 @@ int main()
         cout << format("----------Operator Test End!----------\n");
     }
 #pragma endregion
-#endif
 
-    //for (int i = 0; i < 100; ++i)
-    //{
-    //    Matrix3x3 m1 = GetMatrix3x3Random();
-    //    Matrix3x3 m2 = GetMatrix3x3Random();
-    //    cout << format("{}\n{}\n\n", m1 * m2, BFMatrixMultiply(m1, m2));
-    //}
+#pragma region Function Test
+    {
+        cout << format("----------Function Test!----------\n");
+        Matrix3x3 m1 = GetMatrix3x3Random();
+
+        cout << format("m1.Transpose(): {}\n", m1.Transpose());
+        cout << format("m1.Det(): {}\n", m1.Det());
+        cout << format("m1.Adjoint(): {}\n", m1.Adjoint());
+        cout << format("m1.IsInvertible(): {}\n", m1.IsInvertible());
+        if (m1.IsInvertible())
+            cout << format("m1.Inverse(): {}\n", m1.Inverse());
+
+        cout << format("Matrix3x3::Transpose(): {}\n", Matrix3x3::Transpose(m1));
+        cout << format("Matrix3x3::Det(): {}\n", Matrix3x3::Det(m1));
+        cout << format("Matrix3x3::Adjoint(): {}\n", Matrix3x3::Adjoint(m1));
+        cout << format("Matrix3x3::IsInvertible(): {}\n", Matrix3x3::IsInvertible(m1));
+        if (Matrix3x3::IsInvertible(m1))
+            cout << format("Matrix3x3::Inverse(): {}\n", Matrix3x3::Inverse(m1));
+
+        cout << format("----------Function End Test!----------\n");
+    }
+#pragma endregion
+
+#endif
 
     return 0;
 }

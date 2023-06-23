@@ -14,27 +14,37 @@
 
 _YS_MATH_BEGIN
 const Matrix3x3 Matrix3x3::Identity{1, 0, 0, 0, 1, 0, 0, 0, 1};
-Matrix3x3& Matrix3x3::Transpose() noexcept
+Float Matrix3x3::Det() const noexcept
 {
-    for (UInt8 i = 0; i < 3; ++i)
-    {
-        for (UInt8 j = 0; j < 3; ++j)
-        {
-            if (i == j)
-                continue;
-            std::swap(data[3 * i + j], data[3 * j + i]);
-        }
-    }
-    return *this;
+    return data[0] * data[4] * data[8] +
+           data[1] * data[5] * data[6] +
+           data[2] * data[3] * data[7] -
+           data[0] * data[5] * data[7] -
+           data[1] * data[3] * data[8] -
+           data[2] * data[4] * data[6];
+}
+Matrix3x3 Matrix3x3::Adjoint() const noexcept
+{
+    Matrix3x3 m;
+    m.data[0] = data[4] * data[8] - data[5] * data[7];
+    m.data[3] = data[5] * data[6] - data[3] * data[8];
+    m.data[6] = data[3] * data[7] - data[4] * data[6];
+    m.data[1] = data[2] * data[7] - data[1] * data[8];
+    m.data[4] = data[0] * data[8] - data[2] * data[6];
+    m.data[7] = data[1] * data[0] - data[0] * data[7];
+    m.data[2] = data[1] * data[5] - data[2] * data[4];
+    m.data[5] = data[2] * data[3] - data[0] * data[5];
+    m.data[8] = data[0] * data[4] - data[1] * data[3];
+    return m;
 }
 
 Matrix3x3 operator*(Matrix3x3 const &m1, Matrix3x3 const &m2) noexcept
 {
     Matrix3x3 result{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    for (UInt8 i = 0; i < 3; ++i)
-        for (UInt8 j = 0; j < 3; ++j)
-            for (UInt8 k = 0; k < 3; ++k)
+    for (UInt i = 0; i < 3; ++i)
+        for (UInt j = 0; j < 3; ++j)
+            for (UInt k = 0; k < 3; ++k)
                 result.data[3 * i + k] += m1.data[3 * i + j] * m2.data[3 * j + k];
     return result;
 }

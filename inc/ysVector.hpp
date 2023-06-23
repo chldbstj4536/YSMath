@@ -16,7 +16,7 @@
 
 namespace YS::Math
 {
-    inline bool IsZero(Float f) { return std::fabsf(f) <= FLT_EPSILON; }
+    inline bool IsZero(Float f) { return std::fabs(f) < FLT_EPSILON; }
 
     struct Vector2;
     struct Vector3;
