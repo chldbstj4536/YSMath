@@ -19,7 +19,7 @@ add_library(YSMath ${sources})
 # target에 설치된 라이브러리 추가
 target_include_directories(YSMath
     PRIVATE ./inc
-    PUBLIC ./out/inc)
+    PUBLIC ${CMAKE_INSTALL_PREFIX}/inc)
 
 # 설치 관련 설정
 install(DIRECTORY   ${CMAKE_SOURCE_DIR}/inc/
