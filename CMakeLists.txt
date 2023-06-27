@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(YSMath)
+project(YSMath
+    LANGUAGES CXX)
 
 # 외부 프로젝트 설치
 execute_process(COMMAND ${CMAKE_COMMAND} -S ${CMAKE_SOURCE_DIR}/submodules/YSDefine -B ${CMAKE_BINARY_DIR}/YSDefine -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})

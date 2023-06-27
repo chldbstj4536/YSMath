@@ -10,9 +10,9 @@ using namespace std;
 static const int kMin = -5.0f;
 static const int kMax = 5.0f;
 
-Vector2 GetVector2Random() { return Vector2(YS::Random(kMin, kMax), YS::Random(kMin, kMax)); }
-Vector3 GetVector3Random() { return Vector3(YS::Random(kMin, kMax), YS::Random(kMin, kMax), YS::Random(kMin, kMax)); }
-Vector4 GetVector4Random() { return Vector4(YS::Random(kMin, kMax), YS::Random(kMin, kMax), YS::Random(kMin, kMax), YS::Random(kMin, kMax)); }
+Vector2 GetVector2Random() { return Vector2(YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax)); }
+Vector3 GetVector3Random() { return Vector3(YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax)); }
+Vector4 GetVector4Random() { return Vector4(YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax)); }
 Matrix3x3 GetMatrix3x3Random() { return Matrix3x3(GetVector3Random(), GetVector3Random(), GetVector3Random()); }
 Matrix3x3 BFMatrixMultiply(Matrix3x3 const& m1, Matrix3x3 const& m2)
 {
@@ -53,8 +53,8 @@ int main()
 {
     cout << format("----------Operator Test----------\n");
 
-    float s = YS::Random(kMin, kMax);
-    float s_temp = YS::Random(kMin, kMax);
+    float s = YS::Random::Range(kMin, kMax);
+    float s_temp = YS::Random::Range(kMin, kMax);
 
     {
         cout << format("----------Vector2----------\n");
@@ -262,9 +262,9 @@ int main()
     {
         cout << format("----------Constructor Test!----------\n");
 
-        Matrix3x3 m1{ static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)),
-                          static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)),
-                          static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)), static_cast<float>(YS::Random(kMin, kMax)) };
+        Matrix3x3 m1{ static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)),
+                      static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)),
+                      static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)), static_cast<float>(YS::Random::Range(kMin, kMax)) };
 
         Matrix3x3 m2{ GetVector3Random(), GetVector3Random(), GetVector3Random() };
 
@@ -283,7 +283,7 @@ int main()
         Matrix3x3 m1 = GetMatrix3x3Random();
         Matrix3x3 m2 = GetMatrix3x3Random();
         Vector3 v3 = GetVector3Random();
-        YS::Float k = YS::Random(kMin, kMax);
+        YS::Float k = YS::Random::Range(kMin, kMax);
 
         cout << format("{} + {} = {}\n", m1, m2, m1 + m2);
         cout << format("{} - {} = {}\n", m1, m2, m1 - m2);
