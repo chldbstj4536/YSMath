@@ -58,3 +58,37 @@ Vector4& Vector4::Normalize() throw(division_by_zero)
     return *this;
 }
 _YS_MATH_END
+
+std::format_context::iterator std::formatter<YS::Math::Vector2>::format(YS::Math::Vector2 const &v, std::format_context &format_ctx)
+{
+    auto out = format_ctx.out();
+    out = std::format_to(out, "{{ ");
+    out = std::formatter<float>::format(v.x, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.y, format_ctx);
+    return std::format_to(out, " }}");
+}
+std::format_context::iterator std::formatter<YS::Math::Vector3>::format(YS::Math::Vector3 const &v, std::format_context &format_ctx)
+{
+    auto out = format_ctx.out();
+    out = std::format_to(out, "{{ ");
+    out = std::formatter<float>::format(v.x, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.y, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.z, format_ctx);
+    return std::format_to(out, " }}");
+}
+std::format_context::iterator std::formatter<YS::Math::Vector4>::format(YS::Math::Vector4 const &v, std::format_context &format_ctx)
+{
+    auto out = format_ctx.out();
+    out = std::format_to(out, "{{ ");
+    out = std::formatter<float>::format(v.x, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.y, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.z, format_ctx);
+    out = std::format_to(out, " ");
+    out = std::formatter<float>::format(v.w, format_ctx);
+    return std::format_to(out, " }}");
+}

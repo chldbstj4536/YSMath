@@ -140,15 +140,5 @@ namespace YS::Math
 template <>
 struct std::formatter<YS::Math::Matrix3x3> : std::formatter<YS::Math::Vector3>
 {
-    auto format(YS::Math::Matrix3x3 const &m, std::format_context &format_ctx)
-    {
-        auto out = format_ctx.out();
-        out = std::format_to(out, "{{");
-        out = std::formatter<YS::Math::Vector3>::format(YS::Math::Vector3{m.data[0], m.data[1], m.data[2]}, format_ctx);
-        out = std::format_to(out, " ");
-        out = std::formatter<YS::Math::Vector3>::format(YS::Math::Vector3{m.data[3], m.data[4], m.data[5]}, format_ctx);
-        out = std::format_to(out, " ");
-        out = std::formatter<YS::Math::Vector3>::format(YS::Math::Vector3{m.data[6], m.data[7], m.data[8]}, format_ctx);
-        return std::format_to(out, "}}");
-    }
+    std::format_context::iterator format(YS::Math::Matrix3x3 const &m, std::format_context &format_ctx);
 };

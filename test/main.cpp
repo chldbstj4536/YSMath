@@ -1,5 +1,6 @@
 #include <iostream>
 #include <format>
+#include <YSMath/ysQuaternion.hpp>
 #include <YSMath/ysVector.hpp>
 #include <YSMath/ysMatrix.hpp>
 #include <ysUtility.hpp>
@@ -14,6 +15,7 @@ Vector2 GetVector2Random() { return Vector2(YS::Random::Range(kMin, kMax), YS::R
 Vector3 GetVector3Random() { return Vector3(YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax)); }
 Vector4 GetVector4Random() { return Vector4(YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax), YS::Random::Range(kMin, kMax)); }
 Matrix3x3 GetMatrix3x3Random() { return Matrix3x3(GetVector3Random(), GetVector3Random(), GetVector3Random()); }
+Quaternion GetQuaternionRandom() { return Quaternion{ static_cast<float>(YS::Random::Range(kMin, kMax)), GetVector3Random() }; }
 Matrix3x3 BFMatrixMultiply(Matrix3x3 const& m1, Matrix3x3 const& m2)
 {
     Matrix3x3 result;
@@ -30,7 +32,8 @@ Matrix3x3 BFMatrixMultiply(Matrix3x3 const& m1, Matrix3x3 const& m2)
 }
 
 //#define VECTOR_TEST
-#define MATRIX_TEST
+//#define MATRIX_TEST
+#define QUATERNION_TEST
 
 int main()
 {
@@ -333,6 +336,87 @@ int main()
     }
 #pragma endregion
 
+#endif
+
+#ifdef QUATERNION_TEST
+#pragma region Constructor Test
+    {
+        cout << format("----------Constructor Test!----------\n");
+
+        Quaternion q{ static_cast<float>(YS::Random::Range(kMin, kMax)), GetVector3Random() };
+        cout << format("q: {}\n", q);
+
+        cout << format("----------Constructor Test End!----------\n");
+    }
+#pragma endregion
+    
+    cout << '\n';
+
+#pragma region Operator Test
+    {
+        cout << format("----------Operator Test!----------\n");
+
+        Quaternion q = GetQuaternionRandom();
+        Quaternion q_temp = GetQuaternionRandom();
+        Vector3 v_temp = GetVector3Random();
+        float s_temp = YS::Random::Range(kMin, kMax);
+
+        cout << format("q = {}\n", q);
+        cout << format("q += {}\n", q_temp);
+        q += q_temp;
+        cout << format("q = {}\n", q);
+        cout << format("q -= {}\n", q_temp);
+        q -= q_temp;
+        cout << format("q = {}\n", q);
+        cout << format("q *= {}\n", q_temp);
+        q *= q_temp;
+        cout << format("q = {}\n", q);
+        cout << format("q *= {}\n", s_temp);
+        q *= s_temp;
+        cout << format("q = {}\n", q);
+
+        cout << format("{} == {} : {}\n", q, q_temp, q == q_temp);
+        cout << format("{} != {} : {}\n", q, q_temp, q != q_temp);
+        cout << format("{} == {} : {}\n", q, q, q == q);
+        cout << format("{} != {} : {}\n", q, q, q != q);
+
+        cout << format("{} + {} = {}\n", q, q_temp, q + q_temp);
+        cout << format("{} - {} = {}\n", q, q_temp, q - q_temp);
+        cout << format("{} * {} = {}\n", q, q_temp, q * q_temp);
+        cout << format("{} * {} = {}\n", v_temp, q, v_temp * q);
+        cout << format("{} * {} = {}\n", s_temp, q, s_temp * q);
+
+        cout << format("----------Operator Test End!----------\n");
+    }
+#pragma endregion
+
+    cout << '\n';
+
+#pragma region Function Test
+    {
+        cout << format("----------Function Test!----------\n");
+        Quaternion q = GetQuaternionRandom();
+        cout << format("q = {}\n", q);
+
+        cout << format("q.Conjugate() = {}\n", q.Conjugate());
+        cout << format("q.Length() = {}\n", q.Length());
+        cout << format("q.Normalize() = {}\n", q.Normalize());
+        cout << format("q.Inverse() = {}\n", q.Inverse());
+
+        cout << format("Quaternion::Conjugate(q) = {}\n", Quaternion::Conjugate(q));
+        cout << format("Quaternion::Length(q) = {}\n", Quaternion::Length(q));
+        cout << format("Quaternion::Normalize(q) = {}\n", Quaternion::Normalize(q));
+        cout << format("Quaternion::Inverse(q) = {}\n", Quaternion::Inverse(q));
+
+        cout << format("----------Function Test End!----------\n");
+    }
+#pragma endregion
+    Quaternion q{ 0.707f, {0.0f, 0.707f, 0.0f} };
+    Vector3 v{ 1, 0, 0 };
+
+    v = v * q;
+
+    cout << format("{}", v);
 #endif
 
     return 0;
