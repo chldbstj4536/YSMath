@@ -22,6 +22,8 @@ namespace YS::Math
     struct Vector3;
     struct Vector4;
 
+    using Point3 = Vector3;
+
     inline Vector2 operator-(Vector2 const &v1, Vector2 const &v2) noexcept;
     /**
      * @brief Vector in 2-Dimensional
