@@ -3,6 +3,7 @@
 #include <YSMath/ysQuaternion.hpp>
 #include <YSMath/ysVector.hpp>
 #include <YSMath/ysMatrix.hpp>
+#include <YSMath/ysGeometry.hpp>
 #include <ysUtility.hpp>
 
 using namespace YS::Math;
@@ -411,13 +412,13 @@ int main()
         cout << format("----------Function Test End!----------\n");
     }
 #pragma endregion
-    Quaternion q{ 0.707f, {0.0f, 0.707f, 0.0f} };
-    Vector3 v{ 1, 0, 0 };
-
-    v = v * q;
-
-    cout << format("{}", v);
 #endif
+
+    Line line({ 0, 1, 1 }, { 0, 1, -1 });
+    Plane plane({ 0, 1, 1 }, { 3, -3, 0 });
+    Point3 intersectionPoint = plane.GetPointOnPlane();
+
+    HasIntersectionPoint(line, plane, intersectionPoint);
 
     return 0;
 }
