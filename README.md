@@ -23,7 +23,7 @@ cd YSMath
 ```
 cmake 명령어를 통해 build 폴더에 프로젝트를 생성한다.
 ```
-cmake -S . -B build -DCMAKE_PREFIX_INSTALL=./out
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX="./out"
 ```
 cmake 명령어를 통해 생성된 프로젝트를 빌드하고 결과물을 out폴더에 설치한다.
 ```
@@ -40,7 +40,7 @@ cd test
 
 test 프로젝트를 생성한다.
 ```
-cmake -S . -B build -DCMAKE_PREFIX_INSTALL=./../out
+cmake -S . -B build -DCMAKE_INSTALL_PREFIX="./out"
 ```
 위까지 진행하면 자신의 플렛폼에 설치된 IDE에 맞게 build 폴더에 프로젝트 파일이 생성된다.
 
@@ -50,3 +50,9 @@ cmake --build build
 ```
 
 build/Debug 폴더 안에 테스트 프로그램 실행파일이 생성되어있다.
+
+아래 명령어를 통해 예제 프로그램 결과를 확인할 수 있다.
+
+```
+build/Debug/YSMathTest.exe
+```
